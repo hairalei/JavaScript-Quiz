@@ -1,5 +1,5 @@
 function Error() {
-  return <div>Error</div>;
+  return <p>There was an error fetching questions</p>;
 }
 
 export default Error;

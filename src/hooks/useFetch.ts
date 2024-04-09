@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
-import { BodyRequest, Quiz, Status } from '../helpers/types';
+import { BodyRequest, Quiz } from '../helpers/types';
 
 const token = import.meta.env.VITE_QUIZ_TOKEN as string;
 const baseUrl = import.meta.env.VITE_BASE_URL as string;
@@ -8,7 +8,6 @@ function useFetch(body: BodyRequest) {
   const [data, setData] = useState<Quiz[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [status, setStatus] = useState<Status>('loading');
 
   const url = useMemo(() => {
     // Construct the query parameters

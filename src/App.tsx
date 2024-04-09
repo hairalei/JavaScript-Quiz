@@ -1,62 +1,97 @@
-import { useReducer } from 'react';
-import { Header, Loader, QuizContainer } from './components';
+import { useReducer, useEffect } from 'react';
+import {
+  Header,
+  Loader,
+  QuizContainer,
+  Error as ErrorPage,
+} from './components';
 import { Status, Quiz } from './helpers/types';
-import useFetch from './hooks/useFetch';
 
 type State = {
   questions: Quiz[];
   status: Status;
 };
 
-const initialState = {
+type Action = {
+  type: string;
+  payload?: Quiz[] | string;
+};
+
+const initialState: State = {
   questions: [],
   status: 'loading',
 };
 
-function reducer(
-  state: State,
-  action: { type: string; payload: Quiz[] | string }
-) {
+const token: string = import.meta.env.VITE_QUIZ_TOKEN as string;
+const baseUrl: string = import.meta.env.VITE_BASE_URL as string;
+
+const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case 'dataReceived':
-      return { ...state, questions: action.payload };
+      return { ...state, questions: action.payload as Quiz[], status: 'ready' };
+    case 'dataFailed':
+      return { ...state, status: 'error' };
     default:
-      return { ...state };
+      throw new Error('Unhandled action type');
   }
-}
+};
 
 function App() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
 
-  const {
-    data: questions,
-    isLoading,
-    error,
-  } = useFetch({
-    limit: 15,
+  const queryParams: Record<string, string> = {
+    apiKey: token,
+    limit: '15',
     category: 'Code',
-    tags: ['JavaScript'],
-    difficulty: 'Easy',
-  });
+    tags: ['JavaScript'].join(','),
+    difficulty: 'easy',
+  };
 
-  console.log(questions);
+  // Construct the query string
+  const queryString = new URLSearchParams(queryParams).toString();
+
+  // Construct and return the full URL
+  const url = `${baseUrl}?${queryString}`;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+
+        const responseData = await response.json();
+        dispatch({ type: 'dataReceived', payload: responseData });
+      } catch (err) {
+        if (err instanceof Error) {
+          dispatch({ type: 'error', payload: err.message });
+        } else {
+          dispatch({ type: 'error', payload: 'An unknown error occurred' });
+        }
+      }
+    };
+
+    fetchData();
+  }, [url]);
 
   return (
     <div className='min-w-[100vw] min-h-[100vh] py-16 px-4 '>
       <div className='flex flex-col items-center justify-center max-w-4xl mx-auto '>
         <Header />
 
-        {!error && isLoading ? (
-          <Loader />
-        ) : (
-          <QuizContainer>
-            {questions.map((q: Quiz) => {
+        <QuizContainer>
+          {status === 'loading' && <Loader />}
+          {status === 'error' && <ErrorPage />}
+          {status === 'ready' &&
+            questions.map((q: Quiz) => {
               return <p key={q.id}>{q.question}</p>;
             })}
-          </QuizContainer>
-        )}
-
-        {error && <p>Error: {error}</p>}
+        </QuizContainer>
       </div>
     </div>
   );
