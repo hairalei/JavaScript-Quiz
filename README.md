@@ -2,9 +2,13 @@
 
 This is a simple quiz application built with React, TypeScript, and Vite. It features 15 random JavaScript questions, presented in a multiple-choice format. The app includes a timer, progress bar, score computation, percentage calculation, and a highscore state. All data is managed within the application's state, with no reliance on local storage or external storage solutions.
 
+[Live mode](https://java-script-quiz-sigma.vercel.app/)
+
+![GIF of JavaScript App](/public/js-quiz-gif.gif)
+
 ## Features
 
-- 15 random JavaScript questions
+- 15 random JavaScript questions using [Quiz API](https://quizapi.io/)
 - Multiple-choice format
 - Timer
 - Progress bar
