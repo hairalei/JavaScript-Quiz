@@ -1,5 +1,5 @@
 function Loader() {
-  return <div>Fetching questions...</div>;
+  return <div className='text-center'>Fetching questions...</div>;
 }
 
 export default Loader;

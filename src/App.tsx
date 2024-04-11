@@ -26,7 +26,7 @@ const initialState: State = {
   timer: 0,
 };
 
-const SECS_PER_QUESTION = 30;
+const SECS_PER_QUESTION = 45;
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {

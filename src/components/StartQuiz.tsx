@@ -12,7 +12,7 @@ function StartQuiz({ numQuestions, dispatch }: PropTypes) {
       <h2 className='mb-2 text-lg sm:text-2xl md:text-4xl'>
         Welcome to The JavaScript Quiz
       </h2>
-      <h3 className='mb-10 text-md sm:text-xl md:text-3xl'>
+      <h3 className='mb-10 text-md sm:text-xl md:text-2xl'>
         {numQuestions} questions to test your JavaScript mastery
       </h3>
 
