@@ -8,6 +8,8 @@ import {
   Question,
   NextButton,
   Progress,
+  FinishScreen,
+  Timer,
 } from './components';
 import { State, Quiz, Action, ActionType, Answer } from './helpers/types';
 
@@ -20,7 +22,11 @@ const initialState: State = {
   index: 0,
   answer: null,
   points: 0,
+  highscore: 0,
+  timer: 0,
 };
+
+const SECS_PER_QUESTION = 30;
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -29,7 +35,11 @@ const reducer = (state: State, action: Action): State => {
     case ActionType.DataFailed:
       return { ...state, status: 'error' };
     case ActionType.Start:
-      return { ...state, status: 'active' };
+      return {
+        ...state,
+        status: 'active',
+        timer: state.questions.length * SECS_PER_QUESTION,
+      };
     case ActionType.NewAnswer: {
       const { answer, isCorrect } = action.payload as Answer;
       return {
@@ -44,16 +54,36 @@ const reducer = (state: State, action: Action): State => {
         index: state.index + 1,
         answer: null,
       };
+    case ActionType.Finished:
+      return {
+        ...state,
+        status: 'finished',
+        highscore:
+          state.points > state.highscore ? state.points : state.highscore,
+      };
+    case ActionType.Restart:
+      return {
+        ...initialState,
+        questions: state.questions,
+        status: 'ready',
+        highscore: state.highscore,
+      };
+    case ActionType.Timer:
+      return {
+        ...state,
+        timer: state.timer - 1,
+        status: state.timer === 0 ? 'finished' : state.status,
+      };
     default:
       throw new Error('Unhandled action type');
   }
 };
 
 function App() {
-  const [{ questions, status, index, answer, points }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  const [
+    { questions, status, index, answer, points, highscore, timer },
+    dispatch,
+  ] = useReducer(reducer, initialState);
 
   const numQuestions = questions.length;
 
@@ -108,6 +138,14 @@ function App() {
         <QuizContainer>
           {status === 'loading' && <Loader />}
           {status === 'error' && <ErrorPage />}
+          {status === 'finished' && (
+            <FinishScreen
+              dispatch={dispatch}
+              points={points}
+              numQuestions={numQuestions}
+              highscore={highscore}
+            />
+          )}
           {status === 'ready' && (
             <StartQuiz numQuestions={numQuestions} dispatch={dispatch} />
           )}
@@ -125,9 +163,15 @@ function App() {
                 answer={answer}
               />
 
-              <div className='flex flex-col items-end mt-6'>
-                <NextButton dispatch={dispatch} answer={answer} />
-              </div>
+              <footer className='flex justify-between mt-6'>
+                <Timer dispatch={dispatch} timer={timer} />
+                <NextButton
+                  dispatch={dispatch}
+                  answer={answer}
+                  index={index}
+                  numQuestions={numQuestions}
+                />
+              </footer>
             </>
           )}
         </QuizContainer>

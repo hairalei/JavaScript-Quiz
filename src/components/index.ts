@@ -7,6 +7,8 @@ import Question from './Question';
 import Options from './Options';
 import NextButton from './NextButton';
 import Progress from './Progress';
+import FinishScreen from './FinishScreen';
+import Timer from './Timer';
 
 export {
   Error,
@@ -18,4 +20,6 @@ export {
   Options,
   NextButton,
   Progress,
+  FinishScreen,
+  Timer,
 };

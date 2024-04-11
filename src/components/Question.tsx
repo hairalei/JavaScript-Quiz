@@ -9,8 +9,6 @@ type PropTypes = {
 };
 
 function Question({ question, dispatch, answer }: PropTypes) {
-  console.log(question);
-
   return (
     <div>
       <h4 className='my-8 text-lg font-semibold text-center sm:text-2xl md:text-3xl'>

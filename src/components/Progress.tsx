@@ -9,13 +9,15 @@ function Progress({ index, numQuestion, points }: PropTypes) {
     <header className='w-full'>
       <progress className='progress' max={numQuestion} value={index} />
 
-      <p>
-        Question <strong>{index + 1}</strong> / {numQuestion}
-      </p>
+      <div className='flex justify-between'>
+        <p>
+          Question <strong>{index + 1}</strong> / {numQuestion}
+        </p>
 
-      <p>
-        <strong>{points}</strong> / {numQuestion}
-      </p>
+        <p>
+          <strong>{points}</strong> / {numQuestion}
+        </p>
+      </div>
     </header>
   );
 }

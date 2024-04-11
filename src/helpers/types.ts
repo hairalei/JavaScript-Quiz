@@ -46,6 +46,8 @@ export type State = {
   index: number;
   answer: null | number;
   points: number;
+  highscore: number;
+  timer: number;
 };
 
 export type Answer = {
@@ -66,4 +68,7 @@ export enum ActionType {
   Start = 'start',
   NewAnswer = 'newAnswer',
   NextQuestion = 'nextQuestion',
+  Finished = 'finished',
+  Restart = 'restart',
+  Timer = 'timer',
 }
