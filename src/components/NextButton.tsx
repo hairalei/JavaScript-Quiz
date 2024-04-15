@@ -1,14 +1,8 @@
-import { Dispatch } from 'react';
-import { Action, ActionType } from '../helpers/types';
+import { ActionType } from '../helpers/types';
+import { useQuizContext } from '../contexts/QuizContext';
 
-type PropTypes = {
-  dispatch: Dispatch<Action>;
-  answer: null | number;
-  index: number;
-  numQuestions: number;
-};
-
-function NextButton({ dispatch, answer, index, numQuestions }: PropTypes) {
+function NextButton() {
+  const { dispatch, answer, index, numQuestions } = useQuizContext();
   const isFinished = index === numQuestions - 1;
 
   if (answer === null) return null;

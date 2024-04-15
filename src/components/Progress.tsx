@@ -1,21 +1,18 @@
-type PropTypes = {
-  index: number;
-  numQuestion: number;
-  points: number;
-};
+import { useQuizContext } from '../contexts/QuizContext';
 
-function Progress({ index, numQuestion, points }: PropTypes) {
+function Progress() {
+  const { index, numQuestions, points } = useQuizContext();
   return (
     <header className='w-full'>
-      <progress className='progress' max={numQuestion} value={index} />
+      <progress className='progress' max={numQuestions} value={index} />
 
       <div className='flex justify-between'>
         <p>
-          Question <strong>{index + 1}</strong> / {numQuestion}
+          Question <strong>{index + 1}</strong> / {numQuestions}
         </p>
 
         <p>
-          <strong>{points}</strong> / {numQuestion}
+          <strong>{points}</strong> / {numQuestions}
         </p>
       </div>
     </header>

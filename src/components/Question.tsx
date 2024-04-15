@@ -1,14 +1,10 @@
 import Options from './Options';
-import { Dispatch } from 'react';
-import { Action, Quiz } from '../helpers/types';
+import { useQuizContext } from '../contexts/QuizContext';
 
-type PropTypes = {
-  question: Quiz;
-  dispatch: Dispatch<Action>;
-  answer: null | number;
-};
+function Question() {
+  const { questions, dispatch, answer, index } = useQuizContext();
+  const question = questions[index];
 
-function Question({ question, dispatch, answer }: PropTypes) {
   return (
     <div>
       <h4 className='my-8 text-lg font-semibold text-center sm:text-2xl md:text-3xl'>

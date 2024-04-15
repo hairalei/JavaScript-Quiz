@@ -1,13 +1,9 @@
 import { useEffect } from 'react';
-import { Dispatch } from 'react';
-import { Action, ActionType } from '../helpers/types';
+import { ActionType } from '../helpers/types';
+import { useQuizContext } from '../contexts/QuizContext';
 
-type PropTypes = {
-  dispatch: Dispatch<Action>;
-  timer: number;
-};
-
-function Timer({ dispatch, timer }: PropTypes) {
+function Timer() {
+  const { dispatch, timer } = useQuizContext();
   const mins = Math.floor(timer / 60);
   const seconds = timer % 60;
 

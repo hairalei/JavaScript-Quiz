@@ -1,19 +1,8 @@
-import { Dispatch } from 'react';
-import { Action, ActionType } from '../helpers/types';
+import { ActionType } from '../helpers/types';
+import { useQuizContext } from '../contexts/QuizContext';
 
-type PropTypes = {
-  dispatch: Dispatch<Action>;
-  points: number;
-  numQuestions: number;
-  highscore: number;
-};
-
-function FinishScreen({
-  points,
-  numQuestions,
-  highscore,
-  dispatch,
-}: PropTypes) {
+function FinishScreen() {
+  const { points, numQuestions, highscore, dispatch } = useQuizContext();
   const percentage = (points / numQuestions) * 100;
 
   let emoji;
